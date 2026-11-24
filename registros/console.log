@@ -1,0 +1,109 @@
+PS C:\Users\Alunos\Downloads\techlab> docker compose config
+name: techlab-oficinas
+services:
+  db:
+    environment:
+      POSTGRES_DB: techlab
+      POSTGRES_PASSWORD: techlab
+      POSTGRES_USER: techlab
+    image: postgres:17-alpine
+    networks:
+      default: null
+    volumes:
+      - type: volume
+        source: dados
+        target: /var/lib/postgresql/data
+        volume: {}
+      - type: bind
+        source: C:\Users\Alunos\Downloads\techlab\db\init.sql
+        target: /docker-entrypoint-initdb.d/01-init.sql
+        read_only: true
+        bind: {}
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -h 127.0.0.1 -U $${POSTGRES_USER} -d $${POSTGRES_DB}
+      timeout: 3s
+      interval: 2s
+      retries: 20
+  web:
+    environment:
+      DATABASE_URL: postgres://techlab:techlab@db:5432/techlab
+    networks:
+      default: null
+    build:
+      context: C:\Users\Alunos\Downloads\techlab\web
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+        required: true
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - fetch('http://127.0.0.1:3000/api/oficinas').then(r => {if (!r.ok) process.exit(1)}).catch(()
+          => process.exit(1))
+      timeout: 3s
+      interval: 2s
+      retries: 20
+    ports:
+      - mode: ingress
+        host_ip: 127.0.0.1
+        published: "8080"
+        protocol: tcp
+networks:
+  default:
+    name: techlab-oficinas_default
+volumes:
+  dados:
+    name: techlab-oficinas_dados
+PS C:\Users\Alunos\Downloads\techlab> docker compose up --build --wait web
+[+] up 12/12
+ ✔ Image postgres:17-alpine Pulled                                             16.9s[+] Building 2.4s (13/13) FINISHED                                                  
+ => [internal] load local bake definitions                                     0.0s
+ => => reading from stdin 543B                                                 0.0s
+ => [internal] load build definition from Dockerfile                           0.0s
+ => => transferring dockerfile: 201B                                           0.0s
+ => [internal] load metadata for docker.io/library/node:22-alpine              1.1s
+ => [internal] load .dockerignore                                              0.0s
+ => => transferring context: 58B                                               0.0s
+ => [1/6] FROM docker.io/library/node:22-alpine@sha256:1314fb30ec37592d5845e5  0.1s
+ => => resolve docker.io/library/node:22-alpine@sha256:1314fb30ec37592d5845e5  0.1s
+ => [internal] load build context                                              0.0s
+ => => transferring context: 195B                                              0.0s
+ => CACHED [2/6] WORKDIR /app                                                  0.0s
+ => CACHED [3/6] COPY package*.json ./                                         0.0s
+ => CACHED [4/6] RUN npm ci --omit=dev                                         0.0s
+ => CACHED [5/6] COPY server.js ./                                             0.0s
+ => CACHED [6/6] COPY public ./public                                          0.0s
+ => exporting to image                                                         0.4s
+ => => exporting layers                                                        0.0s
+ => => exporting manifest sha256:9f368acb70d988fc791127ab34688ad6eab205370e19  0.0s
+ => => exporting config sha256:113db6202d8929e369cdfef19d1598765d624f61d882b3  0.1s
+ => => exporting attestation manifest sha256:ee7a1135022f0d16b95a609756da0bd9  0.1s
+ => => exporting manifest list sha256:2444e6b07013229b576d99d749b6ebac9b5aee0  0.1s
+ => => naming to docker.io/library/techlab-oficinas-web:latest                 0.0s
+ => resolving provenance for metadata file                                     0.0s
+[+] up 17/17
+ ✔ Image postgres:17-alpine         Pulled                                     16.9s ✔ Image techlab-oficinas-web       Built                                       2.6s ✔ Network techlab-oficinas_default Created                                     0.1s ✔ Volume techlab-oficinas_dados    Created                                     0.0sPS C:\Users\Alunos\Downloads\techlab> docker compose ps
+NAME                     IMAGE                  COMMAND                  SERVICE   CREATED          STATUS                    PORTS
+techlab-oficinas-db-1    postgres:17-alpine     "docker-entrypoint.s…"   db        21 seconds ago   Up 13 seconds (healthy)   5432/tcp
+techlab-oficinas-web-1   techlab-oficinas-web   "docker-entrypoint.s…"   web       14 seconds ago   Up 8 seconds (healthy)    127.0.0.1:8080->3000/tcp
+PS C:\Users\Alunos\Downloads\techlab> docker compose exec db psql -U techlab -d techlab -c "SELECT * FROM oficinas;"
+ id |              nome               | vagas |     trilha     |   horario   |     l
+----+---------------------------------+-------+----------------+-------------+---------------+------------------------------------------------------------------------
+  1 | Docker na prática               |     2 | Infraestrutura | 19h00–20h30 | Laboratório 1 | Empacote uma aplicação e conecte serviços com Docker Compose.atório 2 | Organize mudanças em branches e revise um pull request em equipe.
+  3 | Testes de interface com Cypress docker compose up --build --wait web^C        
+PS C:\Users\Alunos\Downloads\techlab> docker compose exec db psql -U techlab -d techlab -c "SELECT * FROM inscricoes;"
+----+------------+-------
+(0 rows)
+
+PS C:\Users\Alunos\Downloads\techlab> docker compose down
+[+] down 3/3
+ ✔ Container techlab-oficinas-web-1 Removed                                     3.4s ✔ Container techlab-oficinas-db-1  Removed                                     0.4s
+ ✔ Network techlab-oficinas_default Removed                                     0.2sPS C:\Users\Alunos\Downloads\techlab> docker compose up -d --wait web
+[+] up 3/3
+ ✔ Network techlab-oficinas_default Created                                     0.1s ✔ Container techlab-oficinas-db-1  Healthy                                     4.0s
+ ✔ Container techlab-oficinas-web-1 Healthy                                     5.9sPS C:\Users\Alunos\Downloads\techlab> 

@@ -1,0 +1,161 @@
+
+Alunos@LAB01-D002 MINGW64 ~/Downloads/techlab (main)
+$ docker compose -p techlab-testes exec db psql -U techlab -d techlab -c "TRUNCATE inscricoes;"
+TRUNCATE TABLE
+
+Alunos@LAB01-D002 MINGW64 ~/Downloads/techlab (main)
+$ cd e2e
+
+Alunos@LAB01-D002 MINGW64 ~/Downloads/techlab/e2e (main)
+$ npm test -- --config baseUrl=http://localhost:8080
+
+> test
+> cypress run --config baseUrl=http://localhost:8080
+
+
+
+DevTools listening on ws://127.0.0.1:61766/devtools/browser/4bb9eeea-8542-47da-a
+4c5-6113e538ff3c
+
+================================================================================
+====================
+
+  (Run Starting)
+
+  ┌─────────────────────────────────────────────────────────────────────────────
+───────────────────┐
+  │ Cypress:        15.1.0
+                   │
+  │ Browser:        Electron 136 (headless)
+                   │
+  │ Node Version:   v24.12.0 (C:\Program Files\nodejs\node.exe)
+                   │
+  │ Specs:          1 found (oficinas.cy.js)
+                   │
+  │ Searched:       cypress/e2e/**/*.cy.{js,jsx,ts,tsx}
+                   │
+  └─────────────────────────────────────────────────────────────────────────────
+───────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────
+────────────────────
+
+
+  Running:  oficinas.cy.js
+            (1 of 1)
+
+
+  Oficinas TechLab
+    √ filtra oficinas pela trilha Qualidade (470ms)
+    1) confirma e persiste uma inscrição
+
+
+  1 passing (1s)
+  1 failing
+
+  1) Oficinas TechLab
+       confirma e persiste uma inscrição:
+     Error: Syntax error, unrecognized expression: [data-cy-"oficina-1"]
+      at find.error (http://localhost:8080/__cypress/runner/cypress_runner.js:82
+98:8)
+      at tokenize (http://localhost:8080/__cypress/runner/cypress_runner.js:8964
+:8)
+      at select (http://localhost:8080/__cypress/runner/cypress_runner.js:9423:2
+0)
+      at jQuery.find (http://localhost:8080/__cypress/runner/cypress_runner.js:7
+734:9)
+      at jQuery.fn.init.find (http://localhost:8080/__cypress/runner/cypress_run
+ner.js:9633:11)
+      at new jQuery.fn.init (http://localhost:8080/__cypress/runner/cypress_runn
+er.js:9748:40)
+      at Object.query (http://localhost:8080/__cypress/runner/cypress_runner.js:
+17940:10)
+      at $Cy.$$ (http://localhost:8080/__cypress/runner/cypress_runner.js:143476
+:57)
+      at <unknown> (http://localhost:8080/__cypress/runner/cypress_runner.js:135
+355:18)
+      at Object.subjectFn (http://localhost:8080/__cypress/runner/cypress_runner
+.js:147303:16)
+      at $Cy.verifyUpcomingAssertions (http://localhost:8080/__cypress/runner/cy
+press_runner.js:146631:31)
+      at onRetry (http://localhost:8080/__cypress/runner/cypress_runner.js:14729
+4:15)
+      at retryQuery (http://localhost:8080/__cypress/runner/cypress_runner.js:14
+7307:10)
+      at <unknown> (http://localhost:8080/__cypress/runner/cypress_runner.js:147
+460:17)
+      at tryCatcher (http://localhost:8080/__cypress/runner/cypress_runner.js:17
+77:23)
+      at Promise._settlePromiseFromHandler (http://localhost:8080/__cypress/runn
+er/cypress_runner.js:1489:31)
+      at Promise._settlePromise (http://localhost:8080/__cypress/runner/cypress_
+runner.js:1546:18)
+      at Promise._settlePromiseCtx (http://localhost:8080/__cypress/runner/cypre
+ss_runner.js:1583:10)
+      at _drainQueueStep (http://localhost:8080/__cypress/runner/cypress_runner.
+js:2381:12)
+      at _drainQueue (http://localhost:8080/__cypress/runner/cypress_runner.js:2
+370:9)
+      at Async._drainQueues (http://localhost:8080/__cypress/runner/cypress_runn
+er.js:2386:5)
+      at Async.drainQueues (http://localhost:8080/__cypress/runner/cypress_runne
+r.js:2256:14)
+
+
+
+
+  (Results)
+
+  ┌─────────────────────────────────────────────────────────────────────────────
+───────────────────┐
+  │ Tests:        2
+                   │
+  │ Passing:      1
+                   │
+  │ Failing:      1
+                   │
+  │ Pending:      0
+                   │
+  │ Skipped:      0
+                   │
+  │ Screenshots:  1
+                   │
+  │ Video:        false
+                   │
+  │ Duration:     1 second
+                   │
+  │ Spec Ran:     oficinas.cy.js
+                   │
+  └─────────────────────────────────────────────────────────────────────────────
+───────────────────┘
+
+
+  (Screenshots)
+
+  -  C:\Users\Alunos\Downloads\techlab\e2e\cypress\screenshots\oficinas.cy.js\Of
+icina     (1280x720)
+     s TechLab -- confirma e persiste uma inscrição (failed).png
+
+
+
+================================================================================
+====================
+
+  (Run Finished)
+
+
+       Spec                                              Tests  Passing  Failing
+  Pending  Skipped
+  ┌─────────────────────────────────────────────────────────────────────────────
+───────────────────┐
+  │ ×  oficinas.cy.js                           00:01        2        1        1
+        -        - │
+  └─────────────────────────────────────────────────────────────────────────────
+───────────────────┘
+    ×  1 of 1 failed (100%)                     00:01        2        1        1
+        -        -
+
+
+Alunos@LAB01-D002 MINGW64 ~/Downloads/techlab/e2e (main)
+$

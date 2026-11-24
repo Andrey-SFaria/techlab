@@ -39,3 +39,4 @@ describe('Limite de capacidade', () => {
  .should('have.text', '1 de 1 vagas ocupadas');
  });
 });
+//👍
